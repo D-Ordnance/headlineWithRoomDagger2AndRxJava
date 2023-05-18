@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">HeadLineWithRxJavaAndDagger2</string>
+    <string name="headline">Headline</string>
+    <string name="sample_text">World likely to breach 1.5C climate threshold by 2027, scientists warn - The Guardian</string>
+    <string name="sample_author">Fiona Harvey</string>
+    <string name="top_news">Top News</string>
+</resources>
