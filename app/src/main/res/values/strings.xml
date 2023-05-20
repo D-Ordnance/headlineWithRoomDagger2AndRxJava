@@ -4,4 +4,5 @@
     <string name="sample_text">World likely to breach 1.5C climate threshold by 2027, scientists warn - The Guardian</string>
     <string name="sample_author">Fiona Harvey</string>
     <string name="top_news">Top News</string>
+    <string name="empty_headline_text">No news headline\n You can tap to refresh</string>
 </resources>
