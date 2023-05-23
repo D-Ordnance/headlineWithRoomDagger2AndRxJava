@@ -10,12 +10,19 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.deeosoft.headlinewithrxjavaanddagger2.R;
 import com.deeosoft.headlinewithrxjavaanddagger2.headline.feature.HeadLineModel;
 
 import java.util.List;
 
-public class HeadLineAdapter(Context context, List<HeadLineModel> headLineModels) extends RecyclerView.Adapter<HeadLineAdapter.HeadLineViewHolder> {
+public class HeadLineAdapter extends RecyclerView.Adapter<HeadLineAdapter.HeadLineViewHolder> {
+    Context context;
+    List<HeadLineModel> headLineModels;
+    public HeadLineAdapter(Context context, List<HeadLineModel> headLineModels){
+        this.context = context;
+        this.headLineModels = headLineModels;
+    }
 
     @NonNull
     @Override
@@ -26,12 +33,18 @@ public class HeadLineAdapter(Context context, List<HeadLineModel> headLineModels
 
     @Override
     public int getItemCount() {
-        return 0;
+        return headLineModels.size();
     }
 
     @Override
     public void onBindViewHolder(@NonNull HeadLineViewHolder holder, int position) {
-
+        holder.title.setText(headLineModels.get(position).title);
+        holder.author.setText(headLineModels.get(position).author);
+        Glide.with(context)
+                .load(headLineModels.get(position).imageSrc)
+                .placeholder(R.drawable.image_placeholder)
+                .error(R.drawable.image_fall_back)
+                .into(holder.headLineImage);
     }
 
     class HeadLineViewHolder extends RecyclerView.ViewHolder{
