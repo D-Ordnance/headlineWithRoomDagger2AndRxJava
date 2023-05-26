@@ -9,16 +9,19 @@ import com.deeosoft.headlinewithrxjavaanddagger2.headline.db.entity.HeadLineItem
 
 import java.util.List;
 
+import io.reactivex.rxjava3.core.Completable;
+import io.reactivex.rxjava3.core.Single;
+
 @Dao
-interface HeadLineDAO {
+public interface HeadLineDAO {
 
     @Insert(onConflict = OnConflictStrategy.ABORT)
-    public void insert(HeadLineItem item);
+    public Completable insert(HeadLineItem item);
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    public void insert(List<HeadLineItem> item);
+    public Completable insert(List<HeadLineItem> items);
 
     @Query("SELECT * FROM HeadLine ORDER BY id desc")
-    List<HeadLineItem> getTopHeadLines();
+    public Single<List<HeadLineItem>> getTopHeadLines();
 
 }

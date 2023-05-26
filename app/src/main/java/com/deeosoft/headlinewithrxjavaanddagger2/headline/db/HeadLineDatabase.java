@@ -11,5 +11,5 @@ import com.deeosoft.headlinewithrxjavaanddagger2.headline.db.entity.HeadLineItem
         exportSchema = false
 )
 public abstract class HeadLineDatabase extends RoomDatabase {
-    abstract HeadLineDAO HeadLineDAO();
+    public abstract HeadLineDAO getHeadLineDAO();
 }

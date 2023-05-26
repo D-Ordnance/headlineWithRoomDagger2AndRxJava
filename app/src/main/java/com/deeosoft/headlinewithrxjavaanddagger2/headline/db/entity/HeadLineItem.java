@@ -10,7 +10,7 @@ import java.io.Serializable;
         indices = {@Index(value = {"title", "url", "urlToImage"}, unique = true)}
 )
 public class HeadLineItem implements Serializable {
-    public @PrimaryKey(autoGenerate = true) int id = 0;
+    public @PrimaryKey(autoGenerate = true) long id;
     public String title;
     public String author;
     public String url;

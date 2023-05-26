@@ -6,6 +6,7 @@ import android.content.Context;
 import androidx.room.Room;
 
 import com.deeosoft.headlinewithrxjavaanddagger2.headline.db.HeadLineDatabase;
+import com.deeosoft.headlinewithrxjavaanddagger2.headline.db.helper.RoomHelperImpl;
 
 import javax.inject.Singleton;
 
@@ -29,5 +30,10 @@ public class HeadLineDatabaseModule {
                 HeadLineDatabase.class,
                 "top_head_lines_with_java"
         ).build();
+    }
+
+    @Provides
+    RoomHelperImpl provideRoomHelper(HeadLineDatabase headLineDatabase){
+        return new RoomHelperImpl(headLineDatabase);
     }
 }
