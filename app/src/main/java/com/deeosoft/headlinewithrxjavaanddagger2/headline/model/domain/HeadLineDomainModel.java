@@ -7,4 +7,11 @@ public class HeadLineDomainModel {
     public String title;
     public String url;
     public String imageSrc;
+
+    public HeadLineDomainModel(String author, String title, String url, String imageSrc){
+        this.author = author;
+        this.title = title;
+        this.url = url;
+        this.imageSrc = imageSrc;
+    }
 }
