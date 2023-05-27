@@ -3,6 +3,7 @@ package com.deeosoft.headlinewithrxjavaanddagger2.headline.base;
 import androidx.lifecycle.ViewModel;
 
 import com.deeosoft.headlinewithrxjavaanddagger2.headline.base.rx.SchedulerProvider;
+import com.deeosoft.headlinewithrxjavaanddagger2.headline.data.DataManager;
 
 import javax.inject.Inject;
 
@@ -13,12 +14,15 @@ public abstract class BaseViewModel extends ViewModel {
     @Inject
     SchedulerProvider schedulerProvider;
 
+    @Inject
+    DataManager dataManager;
+
     private final CompositeDisposable compositeDisposable;
 
-    @Inject
-    public BaseViewModel(SchedulerProvider schedulerProvider){
+    public BaseViewModel(SchedulerProvider schedulerProvider, DataManager dataManager){
         compositeDisposable = new CompositeDisposable();
         this.schedulerProvider = schedulerProvider;
+        this.dataManager = dataManager;
     }
 
     protected abstract void setError(Throwable e);
@@ -29,6 +33,10 @@ public abstract class BaseViewModel extends ViewModel {
 
     protected CompositeDisposable getCompositeDisposable(){
         return compositeDisposable;
+    }
+
+    protected DataManager getDataManager(){
+        return dataManager;
     }
 
     @Override

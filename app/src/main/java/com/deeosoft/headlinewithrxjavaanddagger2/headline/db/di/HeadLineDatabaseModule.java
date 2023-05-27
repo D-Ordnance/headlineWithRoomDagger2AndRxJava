@@ -1,12 +1,12 @@
 package com.deeosoft.headlinewithrxjavaanddagger2.headline.db.di;
 
-import android.app.Application;
 import android.content.Context;
 
 import androidx.room.Room;
 
 import com.deeosoft.headlinewithrxjavaanddagger2.headline.db.HeadLineDatabase;
 import com.deeosoft.headlinewithrxjavaanddagger2.headline.db.helper.RoomHelperImpl;
+import com.deeosoft.headlinewithrxjavaanddagger2.headline.scope.AppScope;
 
 import javax.inject.Singleton;
 
@@ -23,7 +23,7 @@ public class HeadLineDatabaseModule {
     }
 
     @Provides
-    @Singleton
+    @AppScope
     HeadLineDatabase provideDatabaseModule(Context context){
         return Room.databaseBuilder(
                 context,
@@ -33,6 +33,7 @@ public class HeadLineDatabaseModule {
     }
 
     @Provides
+    @AppScope
     RoomHelperImpl provideRoomHelper(HeadLineDatabase headLineDatabase){
         return new RoomHelperImpl(headLineDatabase);
     }

@@ -8,18 +8,20 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.deeosoft.headlinewithrxjavaanddagger2.R;
-import com.deeosoft.headlinewithrxjavaanddagger2.headline.feature.HeadLineModel;
+import com.deeosoft.headlinewithrxjavaanddagger2.headline.model.domain.HeadLineDomainModel;
 
 import java.util.List;
 
 public class HeadLineAdapter extends RecyclerView.Adapter<HeadLineAdapter.HeadLineViewHolder> {
     Context context;
-    List<HeadLineModel> headLineModels;
-    public HeadLineAdapter(Context context, List<HeadLineModel> headLineModels){
+    List<HeadLineDomainModel> headLineModels;
+    OnHeadLineCardClickListener listener;
+    public HeadLineAdapter(Context context, List<HeadLineDomainModel> headLineModels, OnHeadLineCardClickListener listener){
         this.context = context;
         this.headLineModels = headLineModels;
     }
@@ -45,17 +47,27 @@ public class HeadLineAdapter extends RecyclerView.Adapter<HeadLineAdapter.HeadLi
                 .placeholder(R.drawable.image_placeholder)
                 .error(R.drawable.image_fall_back)
                 .into(holder.headLineImage);
+        holder.headLineCard.setOnClickListener(
+                v -> listener.onHeadLineCardClick(headLineModels.get(position).url)
+        );
     }
 
     class HeadLineViewHolder extends RecyclerView.ViewHolder{
+        public ConstraintLayout headLineCard;
         public ImageView headLineImage;
         public TextView title;
         public TextView author;
         public HeadLineViewHolder(View itemView){
             super(itemView);
+            headLineCard = itemView.findViewById(R.id.headLineCard);
             headLineImage = itemView.findViewById(R.id.headLineImage);
             title = itemView.findViewById(R.id.title);
             author = itemView.findViewById(R.id.author);
+
         }
+    }
+
+    interface OnHeadLineCardClickListener{
+        void onHeadLineCardClick(String url);
     }
 }

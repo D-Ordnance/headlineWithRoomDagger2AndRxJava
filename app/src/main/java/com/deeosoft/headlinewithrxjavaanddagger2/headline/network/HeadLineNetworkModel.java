@@ -1,8 +1,8 @@
-package com.deeosoft.headlinewithrxjavaanddagger2.headline.feature;
+package com.deeosoft.headlinewithrxjavaanddagger2.headline.network;
 
 import com.google.gson.annotations.SerializedName;
 
-public class HeadLineModel {
+public class HeadLineNetworkModel {
     @SerializedName("author")
     public String author;
     @SerializedName("title")
