@@ -6,16 +6,19 @@ import com.deeosoft.headlinewithrxjavaanddagger2.headline.di.ViewModelProviderFa
 
 import javax.inject.Inject;
 
-import dagger.android.DaggerActivity;
 import dagger.android.support.DaggerAppCompatActivity;
 
-public class BaseActivity<V extends BaseViewModel> extends DaggerAppCompatActivity {
+public abstract class BaseActivity<V extends BaseViewModel> extends DaggerAppCompatActivity {
 
     @Inject
     ViewModelProviderFactory viewModelProviderFactory;
 
+    private V viewModel;
 
-    ViewModelProvider.Factory getViewModelFactory(){
+    public abstract V getViewModel();
+
+
+    public ViewModelProvider.Factory getViewModelFactory(){
         return viewModelProviderFactory;
     }
 }

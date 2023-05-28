@@ -1,9 +1,8 @@
 package com.deeosoft.headlinewithrxjavaanddagger2.headline.data;
 
-import com.deeosoft.headlinewithrxjavaanddagger2.headline.base.rest.HeadLineRepository;
+import com.deeosoft.headlinewithrxjavaanddagger2.headline.repository.HeadLineRepository;
 import com.deeosoft.headlinewithrxjavaanddagger2.headline.db.entity.HeadLineItem;
 import com.deeosoft.headlinewithrxjavaanddagger2.headline.db.helper.RoomHelper;
-import com.deeosoft.headlinewithrxjavaanddagger2.headline.model.domain.HeadLineDomainModel;
 import com.deeosoft.headlinewithrxjavaanddagger2.headline.network.HeadLineNetworkModel;
 
 import java.util.List;

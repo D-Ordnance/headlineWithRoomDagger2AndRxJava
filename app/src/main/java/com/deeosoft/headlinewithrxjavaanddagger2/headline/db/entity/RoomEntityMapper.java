@@ -1,7 +1,10 @@
 package com.deeosoft.headlinewithrxjavaanddagger2.headline.db.entity;
 
 import com.deeosoft.headlinewithrxjavaanddagger2.headline.model.domain.HeadLineDomainModel;
+import com.deeosoft.headlinewithrxjavaanddagger2.util.Collection;
 import com.deeosoft.headlinewithrxjavaanddagger2.util.EntityMapper;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -21,10 +24,7 @@ public class RoomEntityMapper implements EntityMapper<HeadLineItem, HeadLineDoma
         );
     }
 
-    @Override
-    public HeadLineItem mapToEntity(HeadLineDomainModel headLineDomainModel) {
-        // I am not using this
-        // Look into this, because it breaks one of the SOLID principles which is Interface Segregation
-        return null;
+    public List<HeadLineDomainModel> mapFromEntityList(List<HeadLineItem> headLineItems){
+        return Collection.transform(headLineItems, this::mapFromEntity);
     }
 }

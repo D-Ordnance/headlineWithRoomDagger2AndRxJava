@@ -1,8 +1,8 @@
 package com.deeosoft.headlinewithrxjavaanddagger2.headline.di;
 
 import com.deeosoft.headlinewithrxjavaanddagger2.BuildConfig;
-import com.deeosoft.headlinewithrxjavaanddagger2.headline.base.rest.HeadLineRepository;
-import com.deeosoft.headlinewithrxjavaanddagger2.headline.base.rest.HeadLineRepositoryImpl;
+import com.deeosoft.headlinewithrxjavaanddagger2.headline.repository.HeadLineRepository;
+import com.deeosoft.headlinewithrxjavaanddagger2.headline.repository.HeadLineRepositoryImpl;
 import com.deeosoft.headlinewithrxjavaanddagger2.headline.base.rx.SchedulerProviderImpl;
 import com.deeosoft.headlinewithrxjavaanddagger2.headline.data.DataManager;
 import com.deeosoft.headlinewithrxjavaanddagger2.headline.data.DataManagerImpl;
@@ -10,8 +10,6 @@ import com.deeosoft.headlinewithrxjavaanddagger2.headline.db.di.HeadLineDatabase
 import com.deeosoft.headlinewithrxjavaanddagger2.headline.db.helper.RoomHelper;
 import com.deeosoft.headlinewithrxjavaanddagger2.headline.network.NetworkService;
 import com.deeosoft.headlinewithrxjavaanddagger2.headline.scope.AppScope;
-
-import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;

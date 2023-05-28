@@ -8,7 +8,12 @@ import androidx.lifecycle.MutableLiveData;
 import com.deeosoft.headlinewithrxjavaanddagger2.headline.base.BaseViewModel;
 import com.deeosoft.headlinewithrxjavaanddagger2.headline.base.rx.SchedulerProvider;
 import com.deeosoft.headlinewithrxjavaanddagger2.headline.data.DataManager;
+import com.deeosoft.headlinewithrxjavaanddagger2.headline.db.entity.HeadLineItem;
+import com.deeosoft.headlinewithrxjavaanddagger2.headline.db.entity.RoomEntityMapper;
 import com.deeosoft.headlinewithrxjavaanddagger2.headline.model.domain.HeadLineDomainModel;
+import com.deeosoft.headlinewithrxjavaanddagger2.headline.network.HeadLineNetworkModel;
+import com.deeosoft.headlinewithrxjavaanddagger2.headline.network.NetworkEntityMapper;
+import com.deeosoft.headlinewithrxjavaanddagger2.util.NetworkState;
 import com.deeosoft.headlinewithrxjavaanddagger2.util.Resource;
 
 import java.util.List;
@@ -23,16 +28,22 @@ public class HeadLineViewModel extends BaseViewModel {
     private String TAG = "HeadLineViewModel";
 
     @Inject
+    RoomEntityMapper roomEntityMapper;
+
+    @Inject
+    NetworkEntityMapper networkEntityMapper;
+
+    @Inject
     public HeadLineViewModel(SchedulerProvider schedulerProvider, DataManager dataManager) {
         super(schedulerProvider, dataManager);
         getLocalSource();
     }
 
-    LiveData<Resource<Single<List<HeadLineDomainModel>>>> getSource(){
+    public LiveData<Resource<Single<List<HeadLineDomainModel>>>> getSource(){
         return source;
     }
 
-    void getLocalSource(){
+    public void getLocalSource(){
         getCompositeDisposable().add(getDataManager().getTopHeadLines()
                 .doOnSubscribe(disposable -> onLoading())
                 .subscribeOn(getSchedulerProvider().io())
@@ -42,7 +53,7 @@ public class HeadLineViewModel extends BaseViewModel {
                 .subscribe());
     }
 
-    void getRemoteSource(String country, String apiKeys){
+    public void getRemoteSource(String country, String apiKeys){
         getCompositeDisposable().add(getDataManager().getTopHeadLines(country, apiKeys)
                 .doOnSubscribe(disposable -> onLoading())
                 .subscribeOn(getSchedulerProvider().io())
@@ -58,16 +69,21 @@ public class HeadLineViewModel extends BaseViewModel {
     }
 
     private void onLoading(){
-        source.postValue(Resource.loading());
+        source.postValue(Resource.loading(NetworkState.LOADING, null));
     }
 
-    private void onRemoteSourceSuccess(List<HeadLineDomainModel> items){
+    private void onRemoteSourceSuccess(List<HeadLineNetworkModel> items){
         System.out.println("What is the item size: " + items.size());
         Log.d(TAG, "onSuccess: " + items);
+        // emit data here using the entityMapper....
+        Log.d(TAG, "after transformation "  + networkEntityMapper.mapFromEntityList(items));
+
     }
 
-    private void onLocalSourceSuccess(List<HeadLineDomainModel> items){
+    private void onLocalSourceSuccess(List<HeadLineItem> items){
         System.out.println("What is the item size: " + items.size());
         Log.d(TAG, "onSuccess: " + items);
+        // emit data here using the entityMapper....
+        Log.d(TAG, "after transformation "  + roomEntityMapper.mapFromEntityList(items));
     }
 }
