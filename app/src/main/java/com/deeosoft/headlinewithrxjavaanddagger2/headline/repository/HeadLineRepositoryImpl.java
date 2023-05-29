@@ -3,6 +3,7 @@ package com.deeosoft.headlinewithrxjavaanddagger2.headline.repository;
 import com.deeosoft.headlinewithrxjavaanddagger2.headline.db.entity.RoomEntityMapper;
 import com.deeosoft.headlinewithrxjavaanddagger2.headline.network.HeadLineNetworkModel;
 import com.deeosoft.headlinewithrxjavaanddagger2.headline.network.NetworkService;
+import com.deeosoft.headlinewithrxjavaanddagger2.util.GeneralModel;
 
 import java.util.List;
 
@@ -21,7 +22,7 @@ public class HeadLineRepositoryImpl implements HeadLineRepository{
     }
 
     @Override
-    public Single<List<HeadLineNetworkModel>> getTopHeadLines(String country, String apiKey) {
+    public Single<GeneralModel<List<HeadLineNetworkModel>>> getTopHeadLines(String country, String apiKey) {
         return networkService.getTopHeadLines(country, apiKey);
     }
 }

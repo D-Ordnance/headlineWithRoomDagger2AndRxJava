@@ -13,6 +13,7 @@ import com.deeosoft.headlinewithrxjavaanddagger2.headline.db.entity.RoomEntityMa
 import com.deeosoft.headlinewithrxjavaanddagger2.headline.model.domain.HeadLineDomainModel;
 import com.deeosoft.headlinewithrxjavaanddagger2.headline.network.HeadLineNetworkModel;
 import com.deeosoft.headlinewithrxjavaanddagger2.headline.network.NetworkEntityMapper;
+import com.deeosoft.headlinewithrxjavaanddagger2.util.GeneralModel;
 import com.deeosoft.headlinewithrxjavaanddagger2.util.NetworkState;
 import com.deeosoft.headlinewithrxjavaanddagger2.util.Resource;
 
@@ -72,11 +73,11 @@ public class HeadLineViewModel extends BaseViewModel {
         source.postValue(Resource.loading(NetworkState.LOADING, null));
     }
 
-    private void onRemoteSourceSuccess(List<HeadLineNetworkModel> items){
-        System.out.println("What is the item size: " + items.size());
+    private void onRemoteSourceSuccess(GeneralModel<List<HeadLineNetworkModel>> items){
+        System.out.println("What is the item size: " + items.article.get(0).author);
         Log.d(TAG, "onSuccess: " + items);
         // emit data here using the entityMapper....
-        Log.d(TAG, "after transformation "  + networkEntityMapper.mapFromEntityList(items));
+        Log.d(TAG, "after transformation "  + networkEntityMapper.mapFromEntityList(items.article));
 
     }
 

@@ -4,6 +4,7 @@ import com.deeosoft.headlinewithrxjavaanddagger2.headline.repository.HeadLineRep
 import com.deeosoft.headlinewithrxjavaanddagger2.headline.db.entity.HeadLineItem;
 import com.deeosoft.headlinewithrxjavaanddagger2.headline.db.helper.RoomHelper;
 import com.deeosoft.headlinewithrxjavaanddagger2.headline.network.HeadLineNetworkModel;
+import com.deeosoft.headlinewithrxjavaanddagger2.util.GeneralModel;
 
 import java.util.List;
 
@@ -27,7 +28,7 @@ public class DataManagerImpl implements DataManager{
     }
 
     @Override
-    public Single<List<HeadLineNetworkModel>> getTopHeadLines(String country, String apiKey) {
+    public Single<GeneralModel<List<HeadLineNetworkModel>>> getTopHeadLines(String country, String apiKey) {
         return headLineRepository.getTopHeadLines(country, apiKey);
     }
 

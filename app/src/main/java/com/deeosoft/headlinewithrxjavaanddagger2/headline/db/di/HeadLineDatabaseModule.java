@@ -16,25 +16,4 @@ import dagger.Provides;
 @Module
 public class HeadLineDatabaseModule {
 
-    @Provides
-    @Singleton
-    Context provideContext(){
-        return provideContext().getApplicationContext();
-    }
-
-    @Provides
-    @AppScope
-    HeadLineDatabase provideDatabaseModule(Context context){
-        return Room.databaseBuilder(
-                context,
-                HeadLineDatabase.class,
-                "top_head_lines_with_java"
-        ).build();
-    }
-
-    @Provides
-    @AppScope
-    RoomHelperImpl provideRoomHelper(HeadLineDatabase headLineDatabase){
-        return new RoomHelperImpl(headLineDatabase);
-    }
 }

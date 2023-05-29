@@ -1,6 +1,7 @@
 package com.deeosoft.headlinewithrxjavaanddagger2.headline.di;
 
 import com.deeosoft.headlinewithrxjavaanddagger2.BuildConfig;
+import com.deeosoft.headlinewithrxjavaanddagger2.headline.base.rx.SchedulerProvider;
 import com.deeosoft.headlinewithrxjavaanddagger2.headline.repository.HeadLineRepository;
 import com.deeosoft.headlinewithrxjavaanddagger2.headline.repository.HeadLineRepositoryImpl;
 import com.deeosoft.headlinewithrxjavaanddagger2.headline.base.rx.SchedulerProviderImpl;
@@ -16,32 +17,12 @@ import dagger.Provides;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-@Module(includes = {HeadLineDatabaseModule.class})
+@Module(includes = {NetworkModule.class, RoomModule.class})
 public class AppModule {
-    @Provides
-    @AppScope
-    NetworkService provideNetworkService(){
-        return new Retrofit.Builder()
-                .baseUrl(BuildConfig.BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-                .create(NetworkService.class);
-    }
 
     @Provides
     @AppScope
-    SchedulerProviderImpl provideSchedulerProvider(){
+    SchedulerProvider provideSchedulerProvider(){
         return new SchedulerProviderImpl();
-    }
-    @Provides
-    @AppScope
-    HeadLineRepositoryImpl provideHeadLineRepository(NetworkService networkService){
-        return new HeadLineRepositoryImpl(networkService);
-    }
-
-    @Provides
-    @AppScope
-    DataManager provideDataManager(RoomHelper roomHelper, HeadLineRepository headLineRepository){
-        return new DataManagerImpl(roomHelper, headLineRepository);
     }
 }

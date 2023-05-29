@@ -1,5 +1,6 @@
 package com.deeosoft.headlinewithrxjavaanddagger2.headline.base;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.deeosoft.headlinewithrxjavaanddagger2.headline.di.ViewModelProviderFactory;
