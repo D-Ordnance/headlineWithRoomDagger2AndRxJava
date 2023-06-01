@@ -20,15 +20,15 @@ public class Resource<T> {
         this.message = message;
     }
 
-    public static <T> Resource<T> loading(NetworkState networkState, T data){
+    public static <T> Resource<T> loading(T data){
         return new Resource<>(NetworkState.LOADING, data, null);
     }
 
-    public static <T> Resource<T> success(NetworkState networkState, T data, String message){
+    public static <T> Resource<T> success(T data, String message){
         return new Resource<>(NetworkState.SUCCESS, data, message);
     }
 
-    public static <T> Resource<T> error(NetworkState networkState, T data, String message){
+    public static <T> Resource<T> error(T data, String message){
         return new Resource<>(NetworkState.ERROR, data, message);
     }
 

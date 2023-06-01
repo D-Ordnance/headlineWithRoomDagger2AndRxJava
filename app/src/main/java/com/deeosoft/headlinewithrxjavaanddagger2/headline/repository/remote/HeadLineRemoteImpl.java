@@ -1,6 +1,5 @@
-package com.deeosoft.headlinewithrxjavaanddagger2.headline.repository;
+package com.deeosoft.headlinewithrxjavaanddagger2.headline.repository.remote;
 
-import com.deeosoft.headlinewithrxjavaanddagger2.headline.db.entity.RoomEntityMapper;
 import com.deeosoft.headlinewithrxjavaanddagger2.headline.network.HeadLineNetworkModel;
 import com.deeosoft.headlinewithrxjavaanddagger2.headline.network.NetworkService;
 import com.deeosoft.headlinewithrxjavaanddagger2.util.GeneralModel;
@@ -11,13 +10,13 @@ import javax.inject.Inject;
 
 import io.reactivex.rxjava3.core.Single;
 
-public class HeadLineRepositoryImpl implements HeadLineRepository{
+public class HeadLineRemoteImpl implements HeadLineRemote {
 
     @Inject
     NetworkService networkService;
 
     @Inject
-    public HeadLineRepositoryImpl(NetworkService networkService){
+    public HeadLineRemoteImpl(NetworkService networkService){
         this.networkService = networkService;
     }
 

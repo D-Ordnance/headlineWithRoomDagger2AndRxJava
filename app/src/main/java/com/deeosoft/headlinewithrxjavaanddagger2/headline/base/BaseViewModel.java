@@ -3,7 +3,7 @@ package com.deeosoft.headlinewithrxjavaanddagger2.headline.base;
 import androidx.lifecycle.ViewModel;
 
 import com.deeosoft.headlinewithrxjavaanddagger2.headline.base.rx.SchedulerProvider;
-import com.deeosoft.headlinewithrxjavaanddagger2.headline.data.DataManager;
+import com.deeosoft.headlinewithrxjavaanddagger2.headline.repository.data.DataManager;
 
 import javax.inject.Inject;
 

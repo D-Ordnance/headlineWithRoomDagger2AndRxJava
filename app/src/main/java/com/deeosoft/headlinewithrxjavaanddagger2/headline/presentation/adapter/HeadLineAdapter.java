@@ -1,6 +1,7 @@
 package com.deeosoft.headlinewithrxjavaanddagger2.headline.presentation.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,8 +22,12 @@ public class HeadLineAdapter extends RecyclerView.Adapter<HeadLineAdapter.HeadLi
     Context context;
     List<HeadLineDomainModel> headLineModels;
     OnHeadLineCardClickListener listener;
-    public HeadLineAdapter(Context context, List<HeadLineDomainModel> headLineModels, OnHeadLineCardClickListener listener){
+    public HeadLineAdapter(Context context, OnHeadLineCardClickListener listener){
         this.context = context;
+        this.listener = listener;
+    }
+
+    public void addHeadLineList(List<HeadLineDomainModel> headLineModels){
         this.headLineModels = headLineModels;
     }
 
@@ -35,21 +40,24 @@ public class HeadLineAdapter extends RecyclerView.Adapter<HeadLineAdapter.HeadLi
 
     @Override
     public int getItemCount() {
-        return headLineModels.size();
+        return this.headLineModels != null ? headLineModels.size() : 0;
     }
 
     @Override
     public void onBindViewHolder(@NonNull HeadLineViewHolder holder, int position) {
-        holder.title.setText(headLineModels.get(position).title);
-        holder.author.setText(headLineModels.get(position).author);
-        Glide.with(context)
-                .load(headLineModels.get(position).imageSrc)
-                .placeholder(R.drawable.image_placeholder)
-                .error(R.drawable.image_fall_back)
-                .into(holder.headLineImage);
-        holder.headLineCard.setOnClickListener(
-                v -> listener.onHeadLineCardClick(headLineModels.get(position).url)
-        );
+        if(headLineModels != null) {
+            holder.title.setText(headLineModels.get(position).title);
+            holder.author.setText(headLineModels.get(position).author);
+            Log.d("TAG", "onBindViewHolder: " + headLineModels.get(position).imageSrc);
+            Glide.with(context)
+                    .load(headLineModels.get(position).imageSrc)
+                    .placeholder(R.drawable.image_placeholder)
+                    .error(R.drawable.image_fall_back)
+                    .into(holder.headLineImage);
+            holder.headLineCard.setOnClickListener(
+                    v -> listener.onHeadLineCardClick(headLineModels.get(position).url)
+            );
+        }
     }
 
     class HeadLineViewHolder extends RecyclerView.ViewHolder{
@@ -67,7 +75,7 @@ public class HeadLineAdapter extends RecyclerView.Adapter<HeadLineAdapter.HeadLi
         }
     }
 
-    interface OnHeadLineCardClickListener{
+    public interface OnHeadLineCardClickListener{
         void onHeadLineCardClick(String url);
     }
 }

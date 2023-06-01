@@ -16,7 +16,6 @@ public class HeadLineApplication extends DaggerApplication {
     @Override
     protected AndroidInjector<? extends DaggerApplication> applicationInjector() {
         return  DaggerHeadLineComponent.builder().application(this).build();
-//        return null;
     }
 
     @Override

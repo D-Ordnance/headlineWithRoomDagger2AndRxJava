@@ -1,6 +1,6 @@
-package com.deeosoft.headlinewithrxjavaanddagger2.headline.data;
+package com.deeosoft.headlinewithrxjavaanddagger2.headline.repository.data;
 
-import com.deeosoft.headlinewithrxjavaanddagger2.headline.repository.HeadLineRepository;
+import com.deeosoft.headlinewithrxjavaanddagger2.headline.repository.remote.HeadLineRemote;
 import com.deeosoft.headlinewithrxjavaanddagger2.headline.db.entity.HeadLineItem;
 import com.deeosoft.headlinewithrxjavaanddagger2.headline.db.helper.RoomHelper;
 import com.deeosoft.headlinewithrxjavaanddagger2.headline.network.HeadLineNetworkModel;
@@ -13,23 +13,23 @@ import javax.inject.Inject;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Single;
 
-public class DataManagerImpl implements DataManager{
+public class DataManagerImpl implements DataManager {
 
     @Inject
     RoomHelper roomHelper;
 
     @Inject
-    HeadLineRepository headLineRepository;
+    HeadLineRemote headLineRemote;
 
     @Inject
-    public DataManagerImpl(RoomHelper roomHelper, HeadLineRepository headLineRepository){
+    public DataManagerImpl(RoomHelper roomHelper, HeadLineRemote headLineRemote){
         this.roomHelper = roomHelper;
-        this.headLineRepository = headLineRepository;
+        this.headLineRemote = headLineRemote;
     }
 
     @Override
     public Single<GeneralModel<List<HeadLineNetworkModel>>> getTopHeadLines(String country, String apiKey) {
-        return headLineRepository.getTopHeadLines(country, apiKey);
+        return headLineRemote.getTopHeadLines(country, apiKey);
     }
 
     @Override

@@ -1,23 +1,18 @@
 package com.deeosoft.headlinewithrxjavaanddagger2.headline.di;
 
 import android.app.Application;
-import android.content.Context;
 
 import androidx.room.Room;
 
-import com.deeosoft.headlinewithrxjavaanddagger2.headline.data.DataManager;
-import com.deeosoft.headlinewithrxjavaanddagger2.headline.data.DataManagerImpl;
+import com.deeosoft.headlinewithrxjavaanddagger2.headline.repository.data.DataManager;
+import com.deeosoft.headlinewithrxjavaanddagger2.headline.repository.data.DataManagerImpl;
 import com.deeosoft.headlinewithrxjavaanddagger2.headline.db.HeadLineDatabase;
 import com.deeosoft.headlinewithrxjavaanddagger2.headline.db.helper.RoomHelper;
 import com.deeosoft.headlinewithrxjavaanddagger2.headline.db.helper.RoomHelperImpl;
-import com.deeosoft.headlinewithrxjavaanddagger2.headline.network.NetworkService;
-import com.deeosoft.headlinewithrxjavaanddagger2.headline.repository.HeadLineRepository;
-import com.deeosoft.headlinewithrxjavaanddagger2.headline.repository.HeadLineRepositoryImpl;
+import com.deeosoft.headlinewithrxjavaanddagger2.headline.repository.remote.HeadLineRemote;
+import com.deeosoft.headlinewithrxjavaanddagger2.headline.repository.remote.HeadLineRemoteImpl;
 import com.deeosoft.headlinewithrxjavaanddagger2.headline.scope.AppScope;
 
-import javax.inject.Singleton;
-
-import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
 
@@ -25,7 +20,7 @@ import dagger.Provides;
 public class RoomModule {
     @Provides
     @AppScope
-    static HeadLineRepository provideHeadLineRepository(HeadLineRepositoryImpl headLineRepository){
+    static HeadLineRemote provideHeadLineRepository(HeadLineRemoteImpl headLineRepository){
         return headLineRepository;
     }
 
@@ -37,7 +32,7 @@ public class RoomModule {
 
     @Provides
     @AppScope
-    DataManager provideDataManager(RoomHelper roomHelper, HeadLineRepository headLineRepository) {
+    DataManager provideDataManager(RoomHelper roomHelper, HeadLineRemote headLineRepository) {
         return new DataManagerImpl(roomHelper, headLineRepository);
     }
 

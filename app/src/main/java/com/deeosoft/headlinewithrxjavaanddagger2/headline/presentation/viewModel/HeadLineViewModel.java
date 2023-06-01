@@ -7,7 +7,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.deeosoft.headlinewithrxjavaanddagger2.headline.base.BaseViewModel;
 import com.deeosoft.headlinewithrxjavaanddagger2.headline.base.rx.SchedulerProvider;
-import com.deeosoft.headlinewithrxjavaanddagger2.headline.data.DataManager;
+import com.deeosoft.headlinewithrxjavaanddagger2.headline.repository.data.DataManager;
 import com.deeosoft.headlinewithrxjavaanddagger2.headline.db.entity.HeadLineItem;
 import com.deeosoft.headlinewithrxjavaanddagger2.headline.db.entity.RoomEntityMapper;
 import com.deeosoft.headlinewithrxjavaanddagger2.headline.model.domain.HeadLineDomainModel;
@@ -25,7 +25,7 @@ import io.reactivex.rxjava3.core.Single;
 
 public class HeadLineViewModel extends BaseViewModel {
 
-    MutableLiveData<Resource<Single<List<HeadLineDomainModel>>>> source = new MutableLiveData<>();
+    MutableLiveData<Resource<List<HeadLineDomainModel>>> source = new MutableLiveData<>();
     private String TAG = "HeadLineViewModel";
 
     @Inject
@@ -40,7 +40,7 @@ public class HeadLineViewModel extends BaseViewModel {
         getLocalSource();
     }
 
-    public LiveData<Resource<Single<List<HeadLineDomainModel>>>> getSource(){
+    public LiveData<Resource<List<HeadLineDomainModel>>> getSource(){
         return source;
     }
 
@@ -70,13 +70,14 @@ public class HeadLineViewModel extends BaseViewModel {
     }
 
     private void onLoading(){
-        source.postValue(Resource.loading(NetworkState.LOADING, null));
+        source.postValue(Resource.loading(null));
     }
 
     private void onRemoteSourceSuccess(GeneralModel<List<HeadLineNetworkModel>> items){
-        System.out.println("What is the item size: " + items.article.get(0).author);
+        System.out.println("What is the item size: " + items.article.get(0).imageSrc);
         Log.d(TAG, "onSuccess: " + items);
         // emit data here using the entityMapper....
+        source.postValue(Resource.success(networkEntityMapper.mapFromEntityList(items.article), null));
         Log.d(TAG, "after transformation "  + networkEntityMapper.mapFromEntityList(items.article));
 
     }
