@@ -66,7 +66,8 @@ public class HeadLineViewModel extends BaseViewModel {
 
     @Override
     protected void setError(Throwable e) {
-        System.out.println("What is the item size: " + e.getMessage());
+        source.postValue(Resource.error(null, e.getMessage()));
+        System.out.println("Error What is the item size: " + e.getMessage());
     }
 
     private void onLoading(){
