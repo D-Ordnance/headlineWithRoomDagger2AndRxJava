@@ -1,5 +1,7 @@
 package com.deeosoft.headlinewithrxjavaanddagger2.headline.db.helper;
 
+import android.util.Log;
+
 import com.deeosoft.headlinewithrxjavaanddagger2.headline.db.HeadLineDatabase;
 import com.deeosoft.headlinewithrxjavaanddagger2.headline.db.entity.HeadLineItem;
 
@@ -8,10 +10,12 @@ import java.util.List;
 import javax.inject.Inject;
 
 import io.reactivex.rxjava3.core.Completable;
+import io.reactivex.rxjava3.core.Maybe;
 import io.reactivex.rxjava3.core.Single;
 
 public class RoomHelperImpl implements RoomHelper{
 
+    private final String TAG = "RoomHelperImpl";
     @Inject
     public HeadLineDatabase headLineDatabase;
 
@@ -21,7 +25,9 @@ public class RoomHelperImpl implements RoomHelper{
     }
 
     @Override
-    public Completable insert(List<HeadLineItem> items) {
+    public Maybe<Long[]> insert(List<HeadLineItem> items) {
+        Log.d(TAG, "insert: " + items.get(0).title);
+        headLineDatabase.getHeadLineDAO().insert(items.get(0));
         return headLineDatabase.getHeadLineDAO().insert(items);
     }
 

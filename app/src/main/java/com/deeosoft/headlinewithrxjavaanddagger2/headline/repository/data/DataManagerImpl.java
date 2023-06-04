@@ -11,6 +11,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import io.reactivex.rxjava3.core.Completable;
+import io.reactivex.rxjava3.core.Maybe;
 import io.reactivex.rxjava3.core.Single;
 
 public class DataManagerImpl implements DataManager {
@@ -33,7 +34,7 @@ public class DataManagerImpl implements DataManager {
     }
 
     @Override
-    public Completable insert(List<HeadLineItem> items) {
+    public Maybe<Long[]> insert(List<HeadLineItem> items) {
         return roomHelper.insert(items);
     }
 

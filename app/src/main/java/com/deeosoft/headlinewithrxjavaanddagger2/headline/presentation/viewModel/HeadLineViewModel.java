@@ -2,9 +2,11 @@ package com.deeosoft.headlinewithrxjavaanddagger2.headline.presentation.viewMode
 
 import android.util.Log;
 
+import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.deeosoft.headlinewithrxjavaanddagger2.headline.Errors.NetworkErrorListener;
 import com.deeosoft.headlinewithrxjavaanddagger2.headline.base.BaseViewModel;
 import com.deeosoft.headlinewithrxjavaanddagger2.headline.base.rx.SchedulerProvider;
 import com.deeosoft.headlinewithrxjavaanddagger2.headline.repository.data.DataManager;
@@ -14,19 +16,20 @@ import com.deeosoft.headlinewithrxjavaanddagger2.headline.model.domain.HeadLineD
 import com.deeosoft.headlinewithrxjavaanddagger2.headline.network.HeadLineNetworkModel;
 import com.deeosoft.headlinewithrxjavaanddagger2.headline.network.NetworkEntityMapper;
 import com.deeosoft.headlinewithrxjavaanddagger2.util.GeneralModel;
-import com.deeosoft.headlinewithrxjavaanddagger2.util.NetworkState;
 import com.deeosoft.headlinewithrxjavaanddagger2.util.Resource;
 
+import java.util.Arrays;
 import java.util.List;
 
 import javax.inject.Inject;
 
-import io.reactivex.rxjava3.core.Single;
 
-public class HeadLineViewModel extends BaseViewModel {
+public class HeadLineViewModel extends BaseViewModel implements NetworkErrorListener {
 
+    private final String TAG = "HeadLineViewModel";
     MutableLiveData<Resource<List<HeadLineDomainModel>>> source = new MutableLiveData<>();
-    private String TAG = "HeadLineViewModel";
+    public MutableLiveData<Long[]> rowIds = new MutableLiveData();
+
 
     @Inject
     RoomEntityMapper roomEntityMapper;
@@ -37,21 +40,35 @@ public class HeadLineViewModel extends BaseViewModel {
     @Inject
     public HeadLineViewModel(SchedulerProvider schedulerProvider, DataManager dataManager) {
         super(schedulerProvider, dataManager);
-        getLocalSource();
+
+        getLocalSource(null);
     }
 
     public LiveData<Resource<List<HeadLineDomainModel>>> getSource(){
         return source;
     }
 
-    public void getLocalSource(){
-        getCompositeDisposable().add(getDataManager().getTopHeadLines()
-                .doOnSubscribe(disposable -> onLoading())
-                .subscribeOn(getSchedulerProvider().io())
-                .observeOn(getSchedulerProvider().ui())
-                .doOnSuccess(this::onLocalSourceSuccess)
-                .doOnError(this::setError)
-                .subscribe());
+    private void getLocalSource(@Nullable Long[] rowId){
+        if(rowId != null){
+            /*if(rowIds.getValue().length > 0 && rowId.length == rowIds.getValue().length){
+                for(int i = 0; i < rowIds.getValue().length; i++){
+                    if(rowId.)
+                }
+            }*/
+            for(long id: rowId){
+                Log.d(TAG, "getLocalSource: rowId" + id);
+            }
+            if(rowId.length == 0){
+                Log.d(TAG, "getLocalSource: here");
+                source.postValue(Resource.error(null, "No new data"));
+            }else{
+                getCompositeDisposable().add(getDataManager().getTopHeadLines()
+                        .doOnSubscribe(disposable -> onLoading())
+                        .subscribeOn(getSchedulerProvider().io())
+                        .observeOn(getSchedulerProvider().ui())
+                        .subscribe(this::onLocalSourceSuccess, this::setError));
+            }
+        }
     }
 
     public void getRemoteSource(String country, String apiKeys){
@@ -59,15 +76,19 @@ public class HeadLineViewModel extends BaseViewModel {
                 .doOnSubscribe(disposable -> onLoading())
                 .subscribeOn(getSchedulerProvider().io())
                 .observeOn(getSchedulerProvider().ui())
-                .doOnSuccess(this::onRemoteSourceSuccess)
-                .doOnError(this::setError)
-                .subscribe());
+                .subscribe(this::onRemoteSourceSuccess, this::setError));
+    }
+
+    private void saveData(List<HeadLineItem> items){
+        getCompositeDisposable().add(getDataManager().insert(items)
+                .subscribeOn(getSchedulerProvider().io())
+                .observeOn(getSchedulerProvider().ui())
+                .subscribe(this::getLocalSource, this::setError));
     }
 
     @Override
     protected void setError(Throwable e) {
-        source.postValue(Resource.error(null, e.getMessage()));
-        System.out.println("Error What is the item size: " + e.getMessage());
+        source.setValue(Resource.error(null, e.getMessage()));
     }
 
     private void onLoading(){
@@ -75,18 +96,17 @@ public class HeadLineViewModel extends BaseViewModel {
     }
 
     private void onRemoteSourceSuccess(GeneralModel<List<HeadLineNetworkModel>> items){
-        System.out.println("What is the item size: " + items.article.get(0).imageSrc);
-        Log.d(TAG, "onSuccess: " + items);
-        // emit data here using the entityMapper....
-        source.postValue(Resource.success(networkEntityMapper.mapFromEntityList(items.article), null));
-        Log.d(TAG, "after transformation "  + networkEntityMapper.mapFromEntityList(items.article));
-
+        // save data here using the entityMapper....
+        saveData(networkEntityMapper.mapToRoomEntityList(items.article));
     }
 
     private void onLocalSourceSuccess(List<HeadLineItem> items){
-        System.out.println("What is the item size: " + items.size());
-        Log.d(TAG, "onSuccess: " + items);
         // emit data here using the entityMapper....
-        Log.d(TAG, "after transformation "  + roomEntityMapper.mapFromEntityList(items));
+        source.postValue(Resource.success(roomEntityMapper.mapFromEntityList(items), null));
+    }
+
+    @Override
+    public void onNetworkError() {
+
     }
 }

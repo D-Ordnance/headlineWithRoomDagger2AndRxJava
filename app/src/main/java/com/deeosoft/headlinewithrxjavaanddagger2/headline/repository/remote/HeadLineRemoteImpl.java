@@ -1,5 +1,6 @@
 package com.deeosoft.headlinewithrxjavaanddagger2.headline.repository.remote;
 
+import com.deeosoft.headlinewithrxjavaanddagger2.headline.db.entity.HeadLineItem;
 import com.deeosoft.headlinewithrxjavaanddagger2.headline.network.HeadLineNetworkModel;
 import com.deeosoft.headlinewithrxjavaanddagger2.headline.network.NetworkService;
 import com.deeosoft.headlinewithrxjavaanddagger2.util.GeneralModel;

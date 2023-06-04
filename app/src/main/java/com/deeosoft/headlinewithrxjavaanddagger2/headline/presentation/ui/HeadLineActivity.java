@@ -2,8 +2,10 @@ package com.deeosoft.headlinewithrxjavaanddagger2.headline.presentation.ui;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
@@ -18,7 +20,7 @@ import com.deeosoft.headlinewithrxjavaanddagger2.headline.base.BaseActivity;
 import com.deeosoft.headlinewithrxjavaanddagger2.headline.presentation.adapter.HeadLineAdapter;
 import com.deeosoft.headlinewithrxjavaanddagger2.headline.presentation.viewModel.HeadLineViewModel;
 
-public class HeadLineActivity extends BaseActivity<HeadLineViewModel> implements HeadLineAdapter.OnHeadLineCardClickListener {
+public class HeadLineActivity extends BaseActivity<HeadLineViewModel> implements HeadLineAdapter.OnHeadLineCardClickListener, View.OnClickListener {
 
     private static final String TAG = "HeadLineActivity";
 
@@ -45,6 +47,12 @@ public class HeadLineActivity extends BaseActivity<HeadLineViewModel> implements
     }
 
     private void swipeToRefresh(){
+        if(!getNetworkConnection()) {
+            Toast.makeText(this, "No network connection", Toast.LENGTH_LONG).show();
+            swipeRefreshLayout.setVisibility(View.GONE);
+            return;
+        }
+        hideEmptyLayout();
         getViewModel().getRemoteSource("US", BuildConfig.API_KEY);
     }
 
@@ -53,20 +61,27 @@ public class HeadLineActivity extends BaseActivity<HeadLineViewModel> implements
             if(resource != null){
                 switch(resource.networkState){
                     case LOADING:
-                        Log.d(TAG, "initObserver: it is loading");
+                        swipeRefreshLayout.setRefreshing(true);
+                        showLoadingLayout();
                         break;
                     case SUCCESS:
-                        Log.d(TAG, "initObserver: it is successful with data");
-                        Log.d(TAG, "initObserver: " + resource.data);
                         swipeRefreshLayout.setRefreshing(false);
-                        if(adapter != null){
-                            adapter.addHeadLineList(resource.data);
-                            adapter.notifyDataSetChanged();
+                        if(resource.data != null) {
+                            if (resource.data.isEmpty()) {
+                                Log.d(TAG, "initObserver: here");
+                                showEmptyLayout();
+                            } else {
+                                hideEmptyLayout();
+                                if (adapter != null) {
+                                    adapter.addHeadLineList(resource.data);
+                                    adapter.notifyDataSetChanged();
+                                }
+                            }
                         }
                         break;
                     case ERROR:
-                        Log.d(TAG, "initObserver: it failed with message");
-                        Log.d(TAG, "initObserver: " + resource.message);
+                        swipeRefreshLayout.setRefreshing(false);
+                        Toast.makeText(HeadLineActivity.this, resource.message, Toast.LENGTH_LONG).show();
                         break;
                     default:
                         break;
@@ -93,10 +108,37 @@ public class HeadLineActivity extends BaseActivity<HeadLineViewModel> implements
         mToolbar.setTitle("NewsFeed");
 
         swipeRefreshLayout.setOnRefreshListener(this::swipeToRefresh);
+
+        emptyLayout.setOnClickListener(this);
     }
 
     @Override
     public void onHeadLineCardClick(String url) {
         Log.d(TAG, "onHeadLineCardClick: URL" + url);
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.emptyLayout) {
+            swipeToRefresh();
+        }
+    }
+
+    private void showEmptyLayout(){
+        emptyLayout.setVisibility(View.VISIBLE);
+        swipeRefreshLayout.setVisibility(View.GONE);
+        loadingLayout.setVisibility(View.GONE);
+    }
+
+    private void hideEmptyLayout(){
+        emptyLayout.setVisibility(View.GONE);
+        swipeRefreshLayout.setVisibility(View.VISIBLE);
+        loadingLayout.setVisibility(View.GONE);
+    }
+
+    private void showLoadingLayout(){
+        emptyLayout.setVisibility(View.GONE);
+        swipeRefreshLayout.setVisibility(View.VISIBLE);
+        loadingLayout.setVisibility(View.VISIBLE);
     }
 }

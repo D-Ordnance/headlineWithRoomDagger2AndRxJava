@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
-public class GeneralModel<T> implements Serializable {
+public class GeneralModel<T> {
     @SerializedName("status")
     String status;
     @SerializedName("totalResults")

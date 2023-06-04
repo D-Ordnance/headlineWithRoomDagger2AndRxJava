@@ -1,6 +1,5 @@
 package com.deeosoft.headlinewithrxjavaanddagger2.headline.network;
 
-import com.deeosoft.headlinewithrxjavaanddagger2.headline.model.domain.HeadLineDomainModel;
 import com.deeosoft.headlinewithrxjavaanddagger2.util.GeneralModel;
 
 import java.util.List;

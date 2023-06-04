@@ -28,6 +28,7 @@ public class HeadLineAdapter extends RecyclerView.Adapter<HeadLineAdapter.HeadLi
     }
 
     public void addHeadLineList(List<HeadLineDomainModel> headLineModels){
+//        notifyItemInserted(0);
         this.headLineModels = headLineModels;
     }
 
