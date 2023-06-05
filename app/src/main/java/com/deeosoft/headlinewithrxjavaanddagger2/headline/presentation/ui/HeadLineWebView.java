@@ -33,6 +33,8 @@ public class HeadLineWebView extends AppCompatActivity {
         Toolbar toolBar = findViewById(R.id.toolBar);
 
         toolBar.setTitle(title);
+        setSupportActionBar(toolBar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         webView.setWebChromeClient(new WebChromeClient(){
             @Override
