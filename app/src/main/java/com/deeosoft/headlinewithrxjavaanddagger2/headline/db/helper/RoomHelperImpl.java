@@ -1,7 +1,5 @@
 package com.deeosoft.headlinewithrxjavaanddagger2.headline.db.helper;
 
-import android.util.Log;
-
 import com.deeosoft.headlinewithrxjavaanddagger2.headline.db.HeadLineDatabase;
 import com.deeosoft.headlinewithrxjavaanddagger2.headline.db.entity.HeadLineItem;
 
@@ -26,8 +24,6 @@ public class RoomHelperImpl implements RoomHelper{
 
     @Override
     public Maybe<Long[]> insert(List<HeadLineItem> items) {
-        Log.d(TAG, "insert: " + items.get(0).title);
-        headLineDatabase.getHeadLineDAO().insert(items.get(0));
         return headLineDatabase.getHeadLineDAO().insert(items);
     }
 

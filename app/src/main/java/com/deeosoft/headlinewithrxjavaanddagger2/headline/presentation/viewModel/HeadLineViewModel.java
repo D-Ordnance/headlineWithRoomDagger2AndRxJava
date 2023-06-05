@@ -1,7 +1,5 @@
 package com.deeosoft.headlinewithrxjavaanddagger2.headline.presentation.viewModel;
 
-import android.util.Log;
-
 import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -18,7 +16,6 @@ import com.deeosoft.headlinewithrxjavaanddagger2.headline.network.NetworkEntityM
 import com.deeosoft.headlinewithrxjavaanddagger2.util.GeneralModel;
 import com.deeosoft.headlinewithrxjavaanddagger2.util.Resource;
 
-import java.util.Arrays;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -28,7 +25,6 @@ public class HeadLineViewModel extends BaseViewModel implements NetworkErrorList
 
     private final String TAG = "HeadLineViewModel";
     MutableLiveData<Resource<List<HeadLineDomainModel>>> source = new MutableLiveData<>();
-    public MutableLiveData<Long[]> rowIds = new MutableLiveData();
 
 
     @Inject
@@ -50,24 +46,19 @@ public class HeadLineViewModel extends BaseViewModel implements NetworkErrorList
 
     private void getLocalSource(@Nullable Long[] rowId){
         if(rowId != null){
-            /*if(rowIds.getValue().length > 0 && rowId.length == rowIds.getValue().length){
-                for(int i = 0; i < rowIds.getValue().length; i++){
-                    if(rowId.)
-                }
-            }*/
+            long singleRowId = -1;
             for(long id: rowId){
-                Log.d(TAG, "getLocalSource: rowId" + id);
+                singleRowId = id;
             }
-            if(rowId.length == 0){
-                Log.d(TAG, "getLocalSource: here");
+            if(singleRowId == -1){
                 source.postValue(Resource.error(null, "No new data"));
-            }else{
-                getCompositeDisposable().add(getDataManager().getTopHeadLines()
-                        .doOnSubscribe(disposable -> onLoading())
-                        .subscribeOn(getSchedulerProvider().io())
-                        .observeOn(getSchedulerProvider().ui())
-                        .subscribe(this::onLocalSourceSuccess, this::setError));
             }
+            getCompositeDisposable().add(getDataManager().getTopHeadLines()
+                    .doOnSubscribe(disposable -> onLoading())
+                    .subscribeOn(getSchedulerProvider().io())
+                    .observeOn(getSchedulerProvider().ui())
+                    .subscribe(this::onLocalSourceSuccess, this::setError));
+
         }
     }
 

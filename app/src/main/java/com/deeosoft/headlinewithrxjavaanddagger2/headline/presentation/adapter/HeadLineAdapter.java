@@ -1,7 +1,6 @@
 package com.deeosoft.headlinewithrxjavaanddagger2.headline.presentation.adapter;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,14 +48,13 @@ public class HeadLineAdapter extends RecyclerView.Adapter<HeadLineAdapter.HeadLi
         if(headLineModels != null) {
             holder.title.setText(headLineModels.get(position).title);
             holder.author.setText(headLineModels.get(position).author);
-            Log.d("TAG", "onBindViewHolder: " + headLineModels.get(position).imageSrc);
             Glide.with(context)
                     .load(headLineModels.get(position).imageSrc)
                     .placeholder(R.drawable.image_placeholder)
                     .error(R.drawable.image_fall_back)
                     .into(holder.headLineImage);
             holder.headLineCard.setOnClickListener(
-                    v -> listener.onHeadLineCardClick(headLineModels.get(position).url)
+                    v -> listener.onHeadLineCardClick(headLineModels.get(position).url, headLineModels.get(position).title)
             );
         }
     }
@@ -77,6 +75,6 @@ public class HeadLineAdapter extends RecyclerView.Adapter<HeadLineAdapter.HeadLi
     }
 
     public interface OnHeadLineCardClickListener{
-        void onHeadLineCardClick(String url);
+        void onHeadLineCardClick(String url, String title);
     }
 }

@@ -1,5 +1,6 @@
 package com.deeosoft.headlinewithrxjavaanddagger2.headline.presentation.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -24,8 +25,10 @@ public class HeadLineActivity extends BaseActivity<HeadLineViewModel> implements
 
     private static final String TAG = "HeadLineActivity";
 
+    public static final String URL = "url";
+    public static final String TITLE = "title";
+
     private LinearLayout loadingLayout, emptyLayout;
-    private ProgressBar progressBar;
     private SwipeRefreshLayout swipeRefreshLayout;
 
     private RecyclerView recyclerView;
@@ -50,6 +53,7 @@ public class HeadLineActivity extends BaseActivity<HeadLineViewModel> implements
         if(!getNetworkConnection()) {
             Toast.makeText(this, "No network connection", Toast.LENGTH_LONG).show();
             swipeRefreshLayout.setVisibility(View.GONE);
+            emptyLayout.setVisibility(View.VISIBLE);
             return;
         }
         hideEmptyLayout();
@@ -68,7 +72,6 @@ public class HeadLineActivity extends BaseActivity<HeadLineViewModel> implements
                         swipeRefreshLayout.setRefreshing(false);
                         if(resource.data != null) {
                             if (resource.data.isEmpty()) {
-                                Log.d(TAG, "initObserver: here");
                                 showEmptyLayout();
                             } else {
                                 hideEmptyLayout();
@@ -99,7 +102,7 @@ public class HeadLineActivity extends BaseActivity<HeadLineViewModel> implements
     private void initViews(){
         Toolbar mToolbar = findViewById(R.id.headLineToolBar);
         loadingLayout = findViewById(R.id.loadingIndicatorLayout);
-        progressBar = findViewById(R.id.progressIndicator);
+        ProgressBar progressBar = findViewById(R.id.progressIndicator);
         emptyLayout = findViewById(R.id.emptyLayout);
         swipeRefreshLayout = findViewById(R.id.swipeToRefresh);
 
@@ -113,8 +116,9 @@ public class HeadLineActivity extends BaseActivity<HeadLineViewModel> implements
     }
 
     @Override
-    public void onHeadLineCardClick(String url) {
-        Log.d(TAG, "onHeadLineCardClick: URL" + url);
+    public void onHeadLineCardClick(String url, String title) {
+        startActivity(new Intent(this, HeadLineWebView.class)
+                .putExtra(URL, url));
     }
 
     @Override

@@ -16,7 +16,7 @@ import io.reactivex.rxjava3.core.Single;
 @Dao
 public interface HeadLineDAO {
 
-    @Insert()
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     Completable insert(HeadLineItem item);
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
