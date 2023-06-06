@@ -35,6 +35,7 @@ public class HeadLineWebView extends AppCompatActivity {
         toolBar.setTitle(title);
         setSupportActionBar(toolBar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         webView.setWebChromeClient(new WebChromeClient(){
             @Override
@@ -48,4 +49,10 @@ public class HeadLineWebView extends AppCompatActivity {
         webView.loadUrl(url);
     }
 
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+//        return true;
+        return super.onSupportNavigateUp();
+    }
 }
