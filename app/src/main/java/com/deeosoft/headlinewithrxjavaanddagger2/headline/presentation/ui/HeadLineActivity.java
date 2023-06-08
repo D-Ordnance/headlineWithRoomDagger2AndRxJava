@@ -2,7 +2,6 @@ package com.deeosoft.headlinewithrxjavaanddagger2.headline.presentation.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -18,6 +17,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.deeosoft.headlinewithrxjavaanddagger2.BuildConfig;
 import com.deeosoft.headlinewithrxjavaanddagger2.R;
 import com.deeosoft.headlinewithrxjavaanddagger2.headline.base.BaseActivity;
+import com.deeosoft.headlinewithrxjavaanddagger2.headline.network.receiver.NetworkReceiver;
 import com.deeosoft.headlinewithrxjavaanddagger2.headline.presentation.adapter.HeadLineAdapter;
 import com.deeosoft.headlinewithrxjavaanddagger2.headline.presentation.viewModel.HeadLineViewModel;
 
@@ -50,13 +50,11 @@ public class HeadLineActivity extends BaseActivity<HeadLineViewModel> implements
     }
 
     private void swipeToRefresh(){
-        if(!getNetworkConnection()) {
-            Toast.makeText(this, "No network connection", Toast.LENGTH_LONG).show();
-            swipeRefreshLayout.setVisibility(View.GONE);
-            emptyLayout.setVisibility(View.VISIBLE);
+        if(!NetworkReceiver.isNetworkAvailable(this)){
+            swipeRefreshLayout.setRefreshing(false);
+            Toast.makeText(this, "No Network Connection", Toast.LENGTH_LONG).show();
             return;
         }
-        hideEmptyLayout();
         getViewModel().getRemoteSource("US", BuildConfig.API_KEY);
     }
 

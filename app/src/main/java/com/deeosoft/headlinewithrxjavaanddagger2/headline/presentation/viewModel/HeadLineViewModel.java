@@ -1,5 +1,7 @@
 package com.deeosoft.headlinewithrxjavaanddagger2.headline.presentation.viewModel;
 
+import android.util.Log;
+
 import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -15,6 +17,7 @@ import com.deeosoft.headlinewithrxjavaanddagger2.headline.network.HeadLineNetwor
 import com.deeosoft.headlinewithrxjavaanddagger2.headline.network.NetworkEntityMapper;
 import com.deeosoft.headlinewithrxjavaanddagger2.util.GeneralModel;
 import com.deeosoft.headlinewithrxjavaanddagger2.util.Resource;
+import com.deeosoft.headlinewithrxjavaanddagger2.util.Util;
 
 import java.util.List;
 
@@ -44,7 +47,7 @@ public class HeadLineViewModel extends BaseViewModel implements NetworkErrorList
         return source;
     }
 
-    private void getLocalSource(@Nullable Long[] rowId){
+    public void getLocalSource(@Nullable Long[] rowId){
         if(rowId != null){
             long singleRowId = -1;
             for(long id: rowId){
@@ -52,14 +55,14 @@ public class HeadLineViewModel extends BaseViewModel implements NetworkErrorList
             }
             if(singleRowId == -1){
                 source.postValue(Resource.error(null, "No new data"));
+                return;
             }
-            getCompositeDisposable().add(getDataManager().getTopHeadLines()
-                    .doOnSubscribe(disposable -> onLoading())
-                    .subscribeOn(getSchedulerProvider().io())
-                    .observeOn(getSchedulerProvider().ui())
-                    .subscribe(this::onLocalSourceSuccess, this::setError));
-
         }
+        getCompositeDisposable().add(getDataManager().getTopHeadLines()
+                .doOnSubscribe(disposable -> onLoading())
+                .subscribeOn(getSchedulerProvider().io())
+                .observeOn(getSchedulerProvider().ui())
+                .subscribe(this::onLocalSourceSuccess, this::setError));
     }
 
     public void getRemoteSource(String country, String apiKeys){
@@ -74,12 +77,14 @@ public class HeadLineViewModel extends BaseViewModel implements NetworkErrorList
         getCompositeDisposable().add(getDataManager().insert(items)
                 .subscribeOn(getSchedulerProvider().io())
                 .observeOn(getSchedulerProvider().ui())
+                .doOnError(this::setError)
                 .subscribe(this::getLocalSource, this::setError));
     }
 
     @Override
     protected void setError(Throwable e) {
-        source.setValue(Resource.error(null, e.getMessage()));
+        source.setValue(Resource.error(null, Util.formatErrorMessage(e.getMessage())));
+        getLocalSource(null);
     }
 
     private void onLoading(){
